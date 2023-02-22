@@ -14,7 +14,7 @@ char **parse_str(char *str)
 	char **arr;
 	int i;
 
-	arr = malloc(sizeof(char) * SIZEOFPARSE_STR);
+	arr = malloc(sizeof(char *) * SIZEOFPARSE_STR);
 	if (!arr)
 		exit(EXIT_FAILURE);
 	stkn = strtok(str, DELIM);

@@ -4,15 +4,15 @@
  * main - check the code
  * @ac: number of arguments
  * @argv: argument vector
- * @env: enviromental variable
+ *
  *
  * Return: Always 0
  */
 
-int main(int ac __attribute__((unused)), char **argv, char **env)
+
+int main(int ac __attribute__((unused)), char **argv)
 {
 	size_t len = 0;
-	int status;
 	char *command = NULL;
 	char **arr;
 
@@ -34,14 +34,7 @@ int main(int ac __attribute__((unused)), char **argv, char **env)
 			free(arr);
 			continue;
 		}
-		status = check_builtin(arr);
-		if (status == 0)
-		{
-			free(command);
-			free(arr);
-			return (0);
-		}
-		_find_pathdir(arr, argv, env);
+		_execute(arr, argv);
 	}
 	free(command);
 	return (0);
