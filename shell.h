@@ -14,6 +14,7 @@ extern char **environ;
 
 void sig_handler(int signum);
 int _strcmp(char *dest, char *src);
+int _strlen(char *);
 char **parse_str(char *str);
 void _execute(char **arg, char **argv, char **env);
 int _exit_shell(void);

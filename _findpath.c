@@ -29,18 +29,18 @@ int char_counter(char *str, char c)
  */
 char *join_3(char a[], char b[], char d[])
 {
-	size_t i = 0;
+	int i = 0;
 	char *c;
 
-	c = malloc((strlen(a) + strlen(b) + strlen(d) + 1) * sizeof(char));
+	c = malloc((_strlen(a) + _strlen(b) + _strlen(d) + 1) * sizeof(char));
 	if (!c)
 		return (NULL);
-	for (; i < strlen(a); i++)
+	for (; i < _strlen(a); i++)
 		c[i] = a[i];
-	for (; i < strlen(b) + strlen(a); i++)
-		c[i] = b[i - strlen(a)];
-	for (; i < strlen(d) + strlen(b) + strlen(a); i++)
-		c[i] = d[i - strlen(a) - strlen(b)];
+	for (; i < _strlen(b) + _strlen(a); i++)
+		c[i] = b[i - _strlen(a)];
+	for (; i < _strlen(d) + _strlen(b) + _strlen(a); i++)
+		c[i] = d[i - _strlen(a) - _strlen(b)];
 	c[i] = '\0';
 	free(a);
 	return (c);
@@ -62,7 +62,7 @@ char *mystrtok(char *s, char *d)
 		input = s;
 	if (input == NULL)
 		return (NULL);
-	result = malloc(strlen(input) + 1);
+	result = malloc(_strlen(input) + 1);
 	for (; input[i] != '\0'; i++)
 	{
 		if (input[i] != d[0])
