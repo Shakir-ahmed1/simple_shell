@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 
 /**
  * main - check the code
@@ -19,7 +19,7 @@ int main(int ac __attribute__((unused)), char **argv, char **env)
 	signal(SIGINT, sig_handler);
 	while (1)
 	{
-		if(isatty(STDIN_FILENO))
+		if (isatty(STDIN_FILENO))
 			printf("$ ");
 		if (getline(&command, &len, stdin) == -1)
 		{
@@ -37,8 +37,8 @@ int main(int ac __attribute__((unused)), char **argv, char **env)
 		status = check_builtin(arr);
 		if (status == 0)
 		{
-			free(arr);
 			free(command);
+			free(arr);
 			return (0);
 		}
 		_find_pathdir(arr, argv, env);
