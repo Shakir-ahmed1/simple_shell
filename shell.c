@@ -42,7 +42,7 @@ int main(int ac __attribute__((unused)), char **argv, char **env)
 			free(arr);
 			return (0);
 		}
-		_find_pathdir(arr, argv, env);
+		_execute(arr, argv, env);
 	}
 	free(command);
 	return (0);
