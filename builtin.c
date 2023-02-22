@@ -31,7 +31,7 @@ int _benv(void)
 	return (1);
 }
 /**
- * mystrtok - it extracts string by spliting the string using the delimiter
+ * _strtok - it extracts string by spliting the string using the delimiter
  * @d: the delimiter used to split
  * @s: the source's string. it should only called passed once to the string
  * and if more extraction is to be performed, NULL must be passed
@@ -43,7 +43,8 @@ char *_strtok(char *s, char *d)
 	static char *input;
 	char *result;
 	int i = 0, j = 0, len_d = 0;
-	while(d[len_d])
+
+	while (d[len_d])
 		len_d++;
 
 	if (s != NULL)
@@ -75,4 +76,3 @@ char *_strtok(char *s, char *d)
 	input = NULL;
 	return (result);
 }
-
