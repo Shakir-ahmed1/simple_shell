@@ -43,6 +43,7 @@ int main(int ac __attribute__((unused)), char **argv, char **env)
 			return (0);
 		}
 		_execute(arr, argv, env);
+		free(arr);
 	}
 	free(command);
 	return (0);
