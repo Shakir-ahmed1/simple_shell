@@ -21,7 +21,10 @@ int main(int ac __attribute__((unused)), char **argv, char **env)
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
+		{
 			write(STDOUT_FILENO, "$ ", 2);
+			fflush(stdout);
+		}
 		if (getline(&command, &len, stdin) == -1)
 		{
 			write(STDOUT_FILENO, "\n", 1);
@@ -60,4 +63,5 @@ void sig_handler(int signum)
 	(void) signum;
 
 	write(STDOUT_FILENO, "\n", 0);
+	fflush(stdout);
 }
