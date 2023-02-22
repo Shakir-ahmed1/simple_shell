@@ -13,7 +13,15 @@
 extern char **environ;
 
 void sig_handler(int signum);
+int _strcmp(char *dest, char *src);
 char **parse_str(char *str);
-void _execute(char **arg, char **argv);
+void _execute(char **arg, char **argv, char **env);
+int _exit_shell(void);
+int _print_env(void);
+int check_builtin(char **arr);
+int char_counter(char *str, char c);
+char *join_3(char a[], char b[], char d[]);
+char *mystrtok(char *s, char *d);
+void _find_pathdir(char **arr, char **argv, char **env);
 
 #endif
