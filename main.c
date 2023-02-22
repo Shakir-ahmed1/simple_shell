@@ -9,7 +9,7 @@
  * Return: Always 0
  */
 
-int main(int ac, char **argv, char **env)
+int main(int ac __attribute__((unused)), char **argv, char **env)
 {
 	size_t len = 0;
 	int status;
@@ -25,13 +25,22 @@ int main(int ac, char **argv, char **env)
 			write(STDOUT_FILENO, "\n", 1);
 			exit(EXIT_SUCCESS);
 		}
-		if (!command)
-			exit(EXIT_SUCCESS);
+		if (command == NULL)
+			exit(EXIT_FAILURE);
 		arr = parse_str(command);
+		if (!arr[0])
+		{
+			free(arr);
+			continue;
+		}
 		status = check_builtin(arr);
 		if (status == 0)
+		{
+			free(arr);
+			free(command);
 			return (0);
-		_execute(arr, argv);
+		}
+		_find_pathdir(arr, argv, env);
 	}
 	free(command);
 	return (0);

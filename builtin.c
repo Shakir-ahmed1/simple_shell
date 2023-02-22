@@ -8,7 +8,9 @@
 
 int _bexit(void)
 {
+	exit(98);
 	return (0);
+
 }
 
 /**

@@ -1,7 +1,5 @@
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <stdlib.h>
+#include "main.h"
+
 /**
  * char_counter - counts the given character in the string
  * @str: the string
@@ -83,44 +81,85 @@ char *mystrtok(char *s, char *d)
 	return (result);
 }
 /**
+ * _execute - execute commands given
+ * @arg: command to be given
+ * @argv: command line argument
+ * @env: environmental variable
+ *
+ * Return: nothing
+ */
+
+void _execute(char **arg, char **argv, char **env)
+{
+	pid_t my_pid;
+	int status;
+
+	my_pid = fork();
+
+	if (my_pid == -1)
+	{
+		perror(argv[0]);
+		exit(EXIT_FAILURE);
+	}
+	else if (my_pid == 0)
+	{
+		if (execve(arg[0], arg, env) == -1)
+		{
+			perror(argv[0]);
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		wait(&status);
+	}
+}
+/**
  * _find_pathdir - finds the PATH and appends the given command
  * @arr: the passed argument
  * @argv: the second argument
+ * @env: environmental variable
+ *
  */
-void _find_pathdir(char **arr, char **argv)
+void _find_pathdir(char *arr[], char **argv, char **env)
 {
-	int i = 0, k = 0, count;
+	int i = 0, k = 0, count, status = 0;
 	char *str, *stkn;
 	char *parsedir[1024];
 
-	(void) argv;
+	if (arr[0][0] == '/')
+	{
+		status = 1;
+		if (access(arr[0], F_OK) == 0)
+			_execute(arr, argv, env);
+		else
+			perror(argv[0]);
+	}
 	str = getenv("PATH");
 	count = char_counter(str, ':');
 	stkn = join_3(mystrtok(str, ":"), "/", arr[0]);
 	parsedir[0] = stkn;
-	printf("%s\n", parsedir[0]);
+
+	if (access(parsedir[0], F_OK) == 0)
+	{
+		status = 1;
+		_execute(parsedir, argv, env);
+	}
+	k = 1;
 	while (k < count)
 	{
 		stkn = join_3(mystrtok(NULL, ":"), "/", arr[0]);
 		parsedir[++i] = stkn;
-		if (stkn != NULL)
-			printf("%s\n", parsedir[i]);
+
+		if (access(parsedir[k], F_OK) == 0)
+		{
+			status = 1;
+			arr[0] = parsedir[k];
+			_execute(arr, argv, env);
+			break;
+		}
 		k++;
 	}
-	k = 0;
-	while (k <= count)
-	{
-		free(parsedir[k]);
-		k++;
-	}
-}
-/**
- * main - entry
- * Return: always 0
- */
-int main(void)
-{
-	char *arr[] = {"ls", NULL};
-		_find_pathdir(arr, NULL);
-		return (0);
+	if (status != 1)
+		perror(argv[0]);
 }

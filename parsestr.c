@@ -14,18 +14,18 @@ char **parse_str(char *str)
 	char **arr;
 	int i;
 
-	stkn = strtok(str, " \n");
-	arr = malloc(sizeof(char *) * SIZEOFPARSE_STR);
+	arr = malloc(sizeof(char) * SIZEOFPARSE_STR);
 	if (!arr)
-		return (NULL);
-
+		exit(EXIT_FAILURE);
+	stkn = strtok(str, DELIM);
 	arr[0] = stkn;
 	i = 1;
 	while (stkn != NULL)
 	{
-		stkn = strtok(NULL, " \n");
+		stkn = strtok(NULL, DELIM);
 		arr[i] = stkn;
 		i++;
 	}
+	arr[i] = NULL;
 	return (arr);
 }
