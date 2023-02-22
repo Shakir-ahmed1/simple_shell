@@ -19,7 +19,8 @@ int main(int ac __attribute__((unused)), char **argv, char **env)
 	signal(SIGINT, sig_handler);
 	while (1)
 	{
-		printf("$ ");
+		if(isatty(STDIN_FILENO))
+			printf("$ ");
 		if (getline(&command, &len, stdin) == -1)
 		{
 			write(STDOUT_FILENO, "\n", 1);
