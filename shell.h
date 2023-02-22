@@ -22,6 +22,6 @@ int check_builtin(char **arr);
 int char_counter(char *str, char c);
 char *join_3(char a[], char b[], char d[]);
 char *mystrtok(char *s, char *d);
-void _find_pathdir(char **arr, char **argv, char **env);
+char **find_pathdir(char **arr);
 
 #endif
