@@ -22,7 +22,7 @@ int _print_env(void)
 
 	while (environ[k] != NULL)
 	{
-		write(STDOUT_FILENO, environ[k], _strlen(environ[k]));
+		printf("%s\n", environ[k]);
 		k++;
 	}
 	return (1);
