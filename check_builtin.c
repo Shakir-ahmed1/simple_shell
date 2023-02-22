@@ -13,7 +13,7 @@ int check_builtin(char **arr)
 {
 	char *builtin_cmd[] = {"exit", "env"};
 	int (*builtin_fun[])() = {_bexit, _benv};
-	int i, status;
+	int i, status = 1;
 
 	for (i = 0; i < NUMBUILTIN_CMD; i++)
 	{
