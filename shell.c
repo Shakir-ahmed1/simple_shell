@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "main.h"
 
 /**
  * main - check the code
@@ -21,10 +21,14 @@ int main(int ac __attribute__((unused)), char **argv, char **env)
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
-			printf("$ ");
+		{
+			write(STDOUT_FILENO, "$ ", 2);
+			fflush(stdout);
+		}
 		if (getline(&command, &len, stdin) == -1)
 		{
 			write(STDOUT_FILENO, "\n", 1);
+			fflush(stdout);
 			exit(EXIT_SUCCESS);
 		}
 		if (command == NULL)
@@ -38,8 +42,8 @@ int main(int ac __attribute__((unused)), char **argv, char **env)
 		status = check_builtin(arr);
 		if (status == 0)
 		{
-			free(command);
 			free(arr);
+			free(command);
 			return (0);
 		}
 		_execute(arr, argv, env);
@@ -59,4 +63,5 @@ void sig_handler(int signum)
 	(void) signum;
 
 	write(STDOUT_FILENO, "\n", 0);
+	fflush(stdout);
 }
