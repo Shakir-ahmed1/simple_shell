@@ -4,15 +4,16 @@
  * main - check the code
  * @ac: number of arguments
  * @argv: argument vector
- *
+ * @env: enviromental variable
  *
  * Return: Always 0
  */
 
 
-int main(int ac __attribute__((unused)), char **argv)
+int main(int ac __attribute__((unused)), char **argv, char **env)
 {
 	size_t len = 0;
+	int status;
 	char *command = NULL;
 	char **arr;
 
@@ -20,7 +21,7 @@ int main(int ac __attribute__((unused)), char **argv)
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
-			write(1,"$ ", 3);
+			printf("$ ");
 		if (getline(&command, &len, stdin) == -1)
 		{
 			write(STDOUT_FILENO, "\n", 1);
@@ -34,7 +35,14 @@ int main(int ac __attribute__((unused)), char **argv)
 			free(arr);
 			continue;
 		}
-		_execute(arr, argv);
+		status = check_builtin(arr);
+		if (status == 0)
+		{
+			free(command);
+			free(arr);
+			return (0);
+		}
+		_find_pathdir(arr, argv, env);
 	}
 	free(command);
 	return (0);
@@ -50,5 +58,5 @@ void sig_handler(int signum)
 {
 	(void) signum;
 
-	write(STDOUT_FILENO, "\n", 1);
+	write(STDOUT_FILENO, "\n", 0);
 }
