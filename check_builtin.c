@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 
 /**
  * check_builtin - checks whether the given command is builtin
@@ -17,7 +17,7 @@ int check_builtin(char **arr)
 
 	for (i = 0; i < NUMBUILTIN_CMD; i++)
 	{
-		if ((_strcmp(builtin_cmd[i], arr[0]) == 0) && arr[1] == NULL)
+		if (_strcmp(builtin_cmd[i], arr[0]) == 0 && arr[1] == NULL)
 			status = (*builtin_fun[i])();
 	}
 	if (status != 0)
