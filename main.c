@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "main.h"
 
 /**
  * main - check the code
@@ -25,6 +25,7 @@ int main(int ac __attribute__((unused)), char **argv, char **env)
 		if (getline(&command, &len, stdin) == -1)
 		{
 			write(STDOUT_FILENO, "\n", 1);
+			fflush(stdout);
 			exit(EXIT_SUCCESS);
 		}
 		if (command == NULL)
@@ -38,8 +39,8 @@ int main(int ac __attribute__((unused)), char **argv, char **env)
 		status = check_builtin(arr);
 		if (status == 0)
 		{
-			free(command);
 			free(arr);
+			free(command);
 			return (0);
 		}
 		_execute(arr, argv, env);

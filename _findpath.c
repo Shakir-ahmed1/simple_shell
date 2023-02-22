@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "main.h"
 
 /**
  * char_counter - counts the given character in the string
