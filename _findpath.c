@@ -93,6 +93,7 @@ void _execute(char **arg, char **argv, char **env)
 {
 	pid_t my_pid;
 	int status;
+	char **cmd;
 
 	my_pid = fork();
 
@@ -103,7 +104,13 @@ void _execute(char **arg, char **argv, char **env)
 	}
 	else if (my_pid == 0)
 	{
-		if (execve(arg[0], arg, env) == -1)
+		cmd = find_pathdir(arg);
+		if (cmd == NULL)
+		{
+			perror(argv[0]);
+			exit(EXIT_FAILURE);
+		}
+		if (execve(cmd[0], cmd, env) == -1)
 		{
 			perror(argv[0]);
 			exit(EXIT_FAILURE);
@@ -115,25 +122,22 @@ void _execute(char **arg, char **argv, char **env)
 	}
 }
 /**
- * _find_pathdir - finds the PATH and appends the given command
- * @arr: the passed argument
- * @argv: the second argument
- * @env: environmental variable
+ * find_pathdir - finds the PATH and appends the given command
+ * @arr: command given
  *
+ * Return: executable command
+ * If fail retuns null
  */
-void _find_pathdir(char *arr[], char **argv, char **env)
+char **find_pathdir(char *arr[])
 {
-	int i = 0, k = 0, count, status = 0;
+	int i = 0, k = 0, count;
 	char *str, *stkn;
 	char *parsedir[1024];
 
 	if (arr[0][0] == '/')
 	{
-		status = 1;
 		if (access(arr[0], F_OK) == 0)
-			_execute(arr, argv, env);
-		else
-			perror(argv[0]);
+			return (arr);
 	}
 	str = getenv("PATH");
 	count = char_counter(str, ':');
@@ -142,8 +146,8 @@ void _find_pathdir(char *arr[], char **argv, char **env)
 
 	if (access(parsedir[0], F_OK) == 0)
 	{
-		status = 1;
-		_execute(parsedir, argv, env);
+		arr[0] = parsedir[0];
+		return (arr);
 	}
 	k = 1;
 	while (k < count)
@@ -153,13 +157,10 @@ void _find_pathdir(char *arr[], char **argv, char **env)
 
 		if (access(parsedir[k], F_OK) == 0)
 		{
-			status = 1;
 			arr[0] = parsedir[k];
-			_execute(arr, argv, env);
-			break;
+			return (arr);
 		}
 		k++;
 	}
-	if (status != 1)
-		perror(argv[0]);
+	return (NULL);
 }
