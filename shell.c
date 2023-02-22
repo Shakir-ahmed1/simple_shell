@@ -20,7 +20,7 @@ int main(int ac __attribute__((unused)), char **argv)
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
-			printf("$ ");
+			write(1,"$ ", 3);
 		if (getline(&command, &len, stdin) == -1)
 		{
 			write(STDOUT_FILENO, "\n", 1);
