@@ -42,12 +42,10 @@ int main(int ac __attribute__((unused)), char *av[], char *envp[])
 				av[0] = path_search(av[0]);
 			if (execve(av[0], av, envp))
 			{
-				perror("execve"), exit(EXIT_FAILURE);
-				break;
+				perror("execve"), exit(EXIT_FAILURE), break;
 			}
 		}
 		wait(&status), free(av);
 	}
-	free(buffer);
-	return (0);
+	free(buffer), return (0);
 }
