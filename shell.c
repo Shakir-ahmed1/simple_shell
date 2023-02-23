@@ -1,63 +1,53 @@
 #include "shell.h"
-
 /**
- * main - check the code
- * @ac: number of arguments
- * @argv: argument vector
- * @env: enviromental variable
- *
- * Return: Always 0
- */
-
-
-int main(int ac __attribute__((unused)), char **argv, char **env)
+  * main - entry point of the program
+  * @ac: argument counter
+  * @av: argument vector
+  * @envp: array of strings.
+  * Return: 0
+  */
+int main(int ac __attribute__((unused)), char *av[], char *envp[])
 {
-	size_t len = 0;
+	char *buffer = NULL;
+	size_t bufsize = 0;
 	int status;
-	char *command = NULL;
-	char **arr;
+	pid_t child_pid;
 
-	signal(SIGINT, sig_handler);
+	signal(SIGINT, SIG_IGN);
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
-			write(STDOUT_FILENO, "$ ", 2);
-		if (getline(&command, &len, stdin) == -1)
+			printf("~$ ");
+		if (getline(&buffer, &bufsize, stdin) == -1)
+			break;
+		if (buffer == NULL)
+			exit(0);
+		av = parse_input_string(buffer);
+		if (!av[0])
 		{
-			write(STDOUT_FILENO, "\n", 1);
-			exit(EXIT_SUCCESS);
-		}
-		if (command == NULL)
-			exit(EXIT_FAILURE);
-		arr = parse_str(command);
-		if (!arr[0])
-		{
-			free(arr);
+			free(av);
 			continue;
 		}
-		status = check_builtin(arr);
-		if (status == 0)
+		if (_strcmp(av[0], "env") == 0)
 		{
-			free(command);
-			free(arr);
-			return (0);
+			print_environ(), free(av);
+			continue;
 		}
-		_execute(arr, argv, env);
-		free(arr);
+		if (_strcmp(av[0], "exit") == 0)
+			free(av), free(buffer), exit(0);
+		child_pid = fork();
+		if (child_pid == 0)
+		{
+			if (_strchr(av[0], '/') == NULL)
+				av[0] = path_search(av[0]);
+			if (execve(av[0], av, envp))
+			{
+				perror("execve"), exit(EXIT_FAILURE);
+				break;
+			}
+		}
+		wait(&status), free(av);
 	}
-	free(command);
+	free(buffer);
 	return (0);
-}
-
-/**
- * sig_handler - handles the SIGINT interrupt signal
- * @signum: signal id
- *
- */
-
-void sig_handler(int signum)
-{
-	(void) signum;
-
-	write(STDOUT_FILENO, "\n$", 3);
 }
